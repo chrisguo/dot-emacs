@@ -1,0 +1,6 @@
+#name : def func ... end
+#group : definitions
+# --
+def func
+  $0
+end

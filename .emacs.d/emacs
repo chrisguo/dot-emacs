@@ -1,0 +1,214 @@
+
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(font-lock-comment-face ((((class color) (background dark)) (:foreground "dark orange"))))
+ '(font-lock-variable-name-face ((((class color) (background dark)) (:foreground "yellowgreen"))))
+ '(highlight ((((class color) (background dark)) (:background "#252525")))))
+
+;(setq current-language-environment "UTF-8")
+;(setq locale-coding-system 'utf-8)
+;(set-terminal-coding-system 'utf-8)
+;(set-keyboard-coding-system 'utf-8)
+;(set-selection-coding-system 'utf-8)
+;(prefer-coding-system 'utf-8)
+
+;在窗口顶部，显示当前正在编辑的Buffer名。
+(setq frame-title-format "%b")
+;设置加载路径。
+(setq load-path (append
+                 load-path
+                 '("D:/Tools/Emacs/Emacs/lisp/guo")
+                 ))
+
+;在菜单加上“最近打开文件”，方便。
+ (require 'recentf)
+ (recentf-mode 1)
+
+;关闭工具条
+;(tool-bar-mode -1)
+
+ ;(require 'ido)
+;(setq ido-enable-prefix nil)
+;(setq ido-enable-case nil)
+; (ido-mode t)
+
+;设置字体
+(set-default-font "Courier New:pixelsize=18")
+(set-fontset-font (frame-parameter nil 'font)
+		  'han (font-spec :family "SimSun" :size 18))
+(set-fontset-font (frame-parameter nil 'font)
+		  'symbol (font-spec :family "SimSun" :size 18))
+(set-fontset-font (frame-parameter nil 'font)
+		  'cjk-misc (font-spec :family "SimSun" :size 18))
+(set-fontset-font (frame-parameter nil 'font)
+		  'bopomofo (font-spec :family "SimSun" :size 18))
+;设置frame的缺省字体
+(add-to-list 'default-frame-alist '(font . "-*-SimSun-medium-r-normal-*-18-*"))
+;取消滚动栏
+(set-scroll-bar-mode nil)
+
+;设置编辑器前景后景的颜色
+(setq default-frame-alist
+ '(
+    (foreground-color . "green")
+    (background-color . "black")
+    (cursor-color     . "#DDDDDD")
+   )
+)
+
+(setq-default kill-whole-line t)
+;显示时间
+(display-time-mode 1)
+;显示列号
+(column-number-mode t)
+(setq display-time-24hr-format t)
+(setq display-time-day-and-date t)
+(setq display-time-use-mail-icon t)
+(setq display-time-interval 10)
+
+;自定义快捷键
+(global-set-key [f1] 'gnus)
+;f2是标记块的开始
+(global-set-key [(f2)] 'set-mark-command)
+;f3 is begining of record macro
+;f4 is the end of recod macro
+;C_Z为undo
+(global-set-key "\C-z" 'undo)
+;f6是eshell
+(global-set-key [f6] 'eshell)
+;f8是日历
+(global-set-key [f8] 'calendar)
+(global-set-key [f7] 'view-mode)
+(global-set-key [f12] 'other-window)
+;control-space为空，这样好搞中文输入
+(global-set-key [(control space)] nil)
+;躲避鼠标
+(mouse-avoidance-mode 'animate)
+;简化回答yes or no
+(fset 'yes-or-no-p 'y-or-n-p)
+;最大化屏幕，貌似有问题。
+(defun w32-restore-frame (&optional arg)
+    "Restore a minimized frame"
+     (interactive)
+     (w32-send-sys-command 61728 arg))
+(defun w32-maximize-frame (&optional arg)
+    "Maximize the current frame"
+     (interactive)
+     (w32-send-sys-command 61488 arg))
+(w32-maximize-frame)
+(add-hook 'after-make-frame-functions 'w32-maximize-frame)
+
+;启动自动最大化(数据自己调整，注意格式，如(top . 0)，圆点前后都要留有空格)
+;(setq initial-frame-alist '((top . 0) (left . 0) (width . 130) (height . 49)))
+
+;;设置打开文件的缺省路径, 好像不起作用？
+;(setq default-directory "d:/guo/")
+
+(setq scroll-margin 3  scroll-conservatively 10000)
+;;防止页面滚动时跳动， scroll-margin 3 可以在靠近屏幕边沿3行时就开始滚动，可以很好的看到上下文。
+
+(show-paren-mode t)
+(setq show-paren-style 'parenthesis)
+;;括号匹配时可以高亮显示另外一边的括号，但光标不会烦人的跳到另一个括号处。
+
+(setq auto-image-file-mode t)
+;;让 Emacs 可以直接打开和显示图片。
+
+(put 'scroll-left 'disabled nil)     ;允许屏幕左移
+(put 'scroll-right 'disabled nil)    ;允许屏幕右移
+
+;复制一行，重新定义快捷键C_d
+(defun ue-select-line-down ()
+  "like Shift+down in UltraEdit."
+  (interactive)
+  (let ((s (point)))
+  (setq next-line-add-newlines t)
+  (next-line 1)
+  (setq next-line-add-newlines nil)
+  (kill-new (buffer-substring s (point)))))
+
+
+(defun my-dup-line-down ()                 
+  "duplicate this line at next line"
+  (interactive)
+  (let ((c (current-column)))
+    (beginning-of-line)
+    (ue-select-line-down)
+    (beginning-of-line)
+    (yank)
+    (previous-line 1)
+    (move-to-column c)))
+(global-set-key (kbd "C-f") 'my-dup-line-down)
+
+
+(defun open-eshell-other-buffer ()
+  "Open eshell in other buffer"
+  (interactive)
+  (split-window-vertically)
+  (eshell))
+(global-set-key [(f11)] 'open-eshell-other-buffer)
+(global-set-key [C-f11] 'eshell)
+;;目的是开一个shell的小buffer，用于更方便地测试程序(也就是运行程序了)，我经常会用到。
+;;f8就是另开一个buffer然后打开shell，C-f8则是在当前的buffer打开shell
+
+
+(global-set-key [f12] 'list-bookmarks)
+;;设置F12 快速察看书签
+
+(global-set-key (kbd "M-g") 'goto-line)
+;;设置M-g为goto-line
+
+
+;取消开始屏幕
+;(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ ;'(inhibit-startup-screen t))
+
+;;设置日历的一些颜色
+(setq calendar-load-hook
+'(lambda ()
+(set-face-foreground 'diary-face "skyblue")
+(set-face-background 'holiday-face "slate blue")
+(set-face-foreground 'holiday-face "white")))
+
+;;设置我所在地方的经纬度，calendar里有个功能是日月食的预测，和你的经纬度相联系的。
+;; 让emacs能计算日出日落的时间，在 calendar 上用 S 即可看到
+(setq calendar-latitude +39.54)
+(setq calendar-longitude +116.28)
+(setq calendar-location-name "北京")
+
+;; 设置阴历显示，在 calendar 上用 pC 显示阴历
+(setq chinese-calendar-celestial-stem
+  ["甲" "乙" "丙" "丁" "戊" "己" "庚" "辛" "壬" "癸"])
+(setq chinese-calendar-terrestrial-branch
+  ["子" "丑" "寅" "卯" "辰" "巳" "戊" "未" "申" "酉" "戌" "亥"])
+
+;;代码折叠, tmd, 好像对ruby不管用哦。
+(load-library "hideshow")
+(add-hook 'ruby-mode-hook 'hs-minor-mode)
+(add-hook 'php-mode-hook 'hs-minor-mode)
+(add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
+;;能把一个代码块缩起来，需要的时候再展开
+;;  M-x              hs-minor-mode
+;;  C-c @ ESC C-s    show all
+;;  C-c @ ESC C-h    hide all
+;;  C-c @ C-s        show block
+;;  C-c @ C-h        hide block
+;;  C-c @ C-c toggle hide/show
+
+;自动进入缩写模式，并加载缩写
+
+(setq-default abbrev-mode t)
+
+(read-abbrev-file "c:/.abbrev_defs")
+
+(setq save-abbrevs t)
+
+;显示某天发生某事情
+(diary)

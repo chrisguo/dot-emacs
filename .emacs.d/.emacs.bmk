@@ -1,0 +1,26 @@
+;;;; Emacs Bookmark Format Version 1 ;;;;
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(
+("df"
+ (filename . "~/.emacs")
+ (front-context-string . "n\" 'my-dup-line-")
+ (rear-context-string . "dd-item \"gud/dow")
+ (position . 17905))
+("emacs实用秘籍"
+ (filename . "~/文档/Emacs资料/emacs使用技巧.txt")
+ (front-context-string . " m\n跳到书签：\nC_x r b")
+ (rear-context-string . "\n书签：\n设置书签：\nC_x r")
+ (position . 14653))
+("org-remember-last-stored"
+ (filename . "~/gtd/notes.org")
+ (front-context-string . "** [2011-03-13 日")
+ (rear-context-string)
+ (position . 9))
+("bookmark"
+ (filename . "~/.emacs")
+ (front-context-string . "\n  (global-set-k")
+ (rear-context-string . "k\n (require 'bm)")
+ (position . 8322))
+)
