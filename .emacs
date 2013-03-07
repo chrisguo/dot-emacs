@@ -548,6 +548,26 @@ occurence of CHAR."
 ; copy it to the ~/emacs.d/ dir. 
 ; (require 'git)
 
+;---------------------------------------------------------------------------------------------
+; find file automatically
+(require 'filecache)
+(add-to-list 'file-cache-filter-regexps "\\.git\\>")
+;-----------------------------------------------------------------------------------------------
+; alt_up, alt_down 更换上下行。
+(defun swap-line-up ()
+  "Swap the current line with the line above."
+  (interactive)
+  (transpose-lines 1)
+  (beginning-of-line -1))
+
+(defun swap-line-down ()
+  "Swap current line with the line below."
+  (interactive)
+  (beginning-of-line 2) (transpose-lines 1) (beginning-of-line 0))
+
+(global-set-key (kbd "<M-up>") 'swap-line-up)
+(global-set-key (kbd "<M-down>") 'swap-line-down)
+;------------------------------------------------------------------------------------------------
 ;
 ;这部分，记载当前session， 下次加载的时候自动恢复。
 ;需要放在.emacs文件的最后面。
